@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Zap } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/logo.jpg";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -34,10 +35,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto flex items-center justify-between py-4 px-4">
         <a href="#home" className="flex items-center gap-2 group" onClick={() => handleClick("#home")}>
-          <Zap className="h-6 w-6 text-accent transition-all duration-300 group-hover:drop-shadow-[0_0_12px_hsl(45,100%,60%)] group-hover:scale-110" />
-          <span className="font-display text-xl font-bold tracking-tight text-foreground">
-            MR Traders
-          </span>
+          <img src={logo} alt="MR Traders Logo" className="h-10 w-auto rounded transition-all duration-300 group-hover:scale-105" />
         </a>
 
         {/* Desktop */}
