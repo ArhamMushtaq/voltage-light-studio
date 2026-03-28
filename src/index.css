@@ -54,6 +54,9 @@
   * {
     @apply border-border;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-foreground font-body antialiased;
   }
@@ -77,5 +80,29 @@
   }
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground to-muted-foreground;
+  }
+
+  /* Focus glow for inputs */
+  .input-glow:focus {
+    box-shadow: 0 0 0 2px hsl(var(--glow-accent) / 0.15), 0 0 20px -5px hsl(var(--glow-accent) / 0.2);
+    border-color: hsl(var(--accent));
+  }
+
+  /* Button press effect */
+  .btn-press:active {
+    transform: scale(0.97);
+  }
+
+  /* Nav link underline animation */
+  .nav-underline {
+    @apply relative;
+  }
+  .nav-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-[2px] origin-bottom-right scale-x-0 transition-transform duration-300 ease-out;
+    background: hsl(var(--accent));
+  }
+  .nav-underline:hover::after {
+    @apply origin-bottom-left scale-x-100;
   }
 }

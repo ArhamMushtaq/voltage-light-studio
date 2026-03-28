@@ -26,11 +26,15 @@ const products: Product[] = [
   { image: bulb4, name: "MR‑18W High Voltage", voltage: "220V – 480V AC", wattage: "18W", category: "High Voltage", description: "Maximum brightness for large spaces." },
 ];
 
-const ProductCard = ({ product }: { product: Product }) => {
+const ProductCard = ({ product, index }: { product: Product; index: number }) => {
   const whatsappMsg = encodeURIComponent(`Hi, I'd like to inquire about the ${product.name} (${product.wattage}, ${product.voltage}).`);
 
   return (
-    <div className="group rounded-lg border border-border bg-card overflow-hidden transition-all duration-300 hover:border-accent/40 hover:glow-sm">
+    <div
+      data-stagger
+      className="group rounded-lg border border-border bg-card overflow-hidden transition-all duration-500 ease-in-out hover:border-accent/40 hover:glow-sm hover:-translate-y-2 opacity-0"
+      style={{ animationDelay: `${index * 120}ms` }}
+    >
       <div className="aspect-square overflow-hidden bg-secondary/30">
         <img
           src={product.image}
@@ -38,7 +42,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           loading="lazy"
           width={512}
           height={512}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
         />
       </div>
       <div className="p-5 space-y-3">
@@ -50,7 +54,7 @@ const ProductCard = ({ product }: { product: Product }) => {
         </div>
         <p className="text-sm text-muted-foreground">{product.description}</p>
         <Button
-          className="w-full bg-accent text-accent-foreground hover:bg-accent/90 mt-2"
+          className="w-full bg-accent text-accent-foreground hover:bg-accent/90 mt-2 btn-press transition-all duration-300 hover:glow-sm"
           asChild
         >
           <a href={`https://wa.me/919876543210?text=${whatsappMsg}`} target="_blank" rel="noopener noreferrer">
@@ -63,7 +67,7 @@ const ProductCard = ({ product }: { product: Product }) => {
 };
 
 const ProductsSection = () => {
-  const ref = useScrollFade();
+  const ref = useScrollFade({ staggerChildren: true, staggerDelay: 120 });
 
   return (
     <section id="products" className="py-24 border-t border-border">
@@ -78,8 +82,8 @@ const ProductsSection = () => {
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((p) => (
-            <ProductCard key={p.name} product={p} />
+          {products.map((p, i) => (
+            <ProductCard key={p.name} product={p} index={i} />
           ))}
         </div>
       </div>

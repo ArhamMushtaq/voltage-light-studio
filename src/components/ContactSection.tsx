@@ -36,18 +36,19 @@ const ContactSection = () => {
               Have questions about our LED products? Reach out and we'll respond promptly.
             </p>
             <div className="space-y-4">
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <Mail className="h-5 w-5 text-accent" />
-                <span>info@mrtraders.com</span>
-              </div>
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <Phone className="h-5 w-5 text-accent" />
-                <span>+91 98765 43210</span>
-              </div>
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <MapPin className="h-5 w-5 text-accent" />
-                <span>Industrial Area, New Delhi, India</span>
-              </div>
+              {[
+                { icon: Mail, text: "info@mrtraders.com" },
+                { icon: Phone, text: "+91 98765 43210" },
+                { icon: MapPin, text: "Industrial Area, New Delhi, India" },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 text-muted-foreground group transition-all duration-300 hover:translate-x-1"
+                >
+                  <item.icon className="h-5 w-5 text-accent transition-transform duration-300 group-hover:scale-110" />
+                  <span>{item.text}</span>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -58,7 +59,7 @@ const ContactSection = () => {
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               maxLength={100}
-              className="bg-secondary border-border text-foreground placeholder:text-muted-foreground"
+              className="bg-secondary border-border text-foreground placeholder:text-muted-foreground input-glow transition-all duration-300"
             />
             <Input
               type="email"
@@ -66,7 +67,7 @@ const ContactSection = () => {
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               maxLength={255}
-              className="bg-secondary border-border text-foreground placeholder:text-muted-foreground"
+              className="bg-secondary border-border text-foreground placeholder:text-muted-foreground input-glow transition-all duration-300"
             />
             <Textarea
               placeholder="Your message..."
@@ -74,9 +75,9 @@ const ContactSection = () => {
               onChange={(e) => setForm({ ...form, message: e.target.value })}
               maxLength={1000}
               rows={5}
-              className="bg-secondary border-border text-foreground placeholder:text-muted-foreground resize-none"
+              className="bg-secondary border-border text-foreground placeholder:text-muted-foreground resize-none input-glow transition-all duration-300"
             />
-            <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 glow-sm">
+            <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 glow-sm btn-press transition-all duration-300 hover:glow-md">
               Send Message
             </Button>
           </form>

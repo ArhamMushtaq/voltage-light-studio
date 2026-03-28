@@ -10,7 +10,7 @@ const features = [
 ];
 
 const FeaturesSection = () => {
-  const ref = useScrollFade();
+  const ref = useScrollFade({ staggerChildren: true, staggerDelay: 100 });
 
   return (
     <section id="features" className="py-24 border-t border-border">
@@ -22,9 +22,14 @@ const FeaturesSection = () => {
           </h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-          {features.map((f) => (
-            <div key={f.title} className="rounded-lg border border-border bg-card p-6 text-center space-y-3 transition-all duration-300 hover:border-accent/40 hover:glow-sm">
-              <div className="mx-auto w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
+          {features.map((f, i) => (
+            <div
+              key={f.title}
+              data-stagger
+              className="rounded-lg border border-border bg-card p-6 text-center space-y-3 transition-all duration-500 ease-in-out hover:border-accent/40 hover:glow-sm hover:-translate-y-2 opacity-0"
+              style={{ animationDelay: `${i * 100}ms` }}
+            >
+              <div className="mx-auto w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
                 <f.icon className="h-5 w-5 text-accent" />
               </div>
               <h3 className="font-display font-semibold text-foreground">{f.title}</h3>
