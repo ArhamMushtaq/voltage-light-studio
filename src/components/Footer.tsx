@@ -1,5 +1,5 @@
+import { Zap } from "lucide-react";
 import { useScrollFade } from "@/hooks/useScrollFade";
-import logo from "@/assets/logo.jpg";
 
 const Footer = () => {
   const ref = useScrollFade();
@@ -10,7 +10,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <img src={logo} alt="MR Traders Logo" className="h-10 w-auto rounded" />
+              <Zap className="h-5 w-5 text-accent" />
+              <span className="font-display text-lg font-bold text-foreground">MR Traders</span>
             </div>
             <p className="text-sm text-muted-foreground">Reliable LED Solutions for Every Voltage</p>
           </div>
