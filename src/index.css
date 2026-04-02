@@ -175,6 +175,39 @@
   }
 }
 
+/* Wire connection intro animations */
+.wire-left {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: wire-draw-left 1.8s ease-in-out forwards;
+}
+.wire-right {
+  stroke-dasharray: 600;
+  stroke-dashoffset: -600;
+  animation: wire-draw-right 1.8s ease-in-out forwards;
+}
+.wire-left-tip {
+  opacity: 0;
+  animation: tip-appear 0.3s ease-out 1.5s forwards;
+}
+.wire-right-tip {
+  opacity: 0;
+  animation: tip-appear 0.3s ease-out 1.5s forwards;
+}
+
+@keyframes wire-draw-left {
+  0% { stroke-dashoffset: 600; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes wire-draw-right {
+  0% { stroke-dashoffset: -600; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes tip-appear {
+  0% { opacity: 0; r: 2; }
+  100% { opacity: 1; r: 4; }
+}
+
 @keyframes sweep {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
