@@ -26,7 +26,7 @@ const statuses: { label: string; value: StatusFilter }[] = [
 const ProductCard = ({ product, index }: { product: Product; index: number }) => {
   const tilt = useTilt({ maxTilt: 6, scale: 1.03 });
   const whatsappMsg = encodeURIComponent(
-    `Hi, I'd like to inquire about the ${product.name} (${product.wattage}, ${product.voltage}).`
+    `Hello, I am interested in the product: ${product.name}, Voltage: ${product.voltage}, Wattage: ${product.wattage}. Please share details.`
   );
 
   return (
