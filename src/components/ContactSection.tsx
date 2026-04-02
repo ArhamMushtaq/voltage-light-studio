@@ -84,9 +84,9 @@ const ContactSection = () => {
               rows={5}
               className="bg-secondary/50 border-border text-foreground placeholder:text-muted-foreground resize-none input-glow transition-all duration-300"
             />
-            <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 led-glow btn-press light-sweep transition-all duration-300">
+            <LedButton type="submit" className="w-full">
               Send Message
-            </Button>
+            </LedButton>
           </form>
         </div>
       </div>

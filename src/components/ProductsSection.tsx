@@ -59,14 +59,11 @@ const ProductCard = ({ product, index }: { product: Product; index: number }) =>
           <span className="text-muted-foreground">{product.wattage}</span>
         </div>
         <p className="text-sm text-muted-foreground">{product.description}</p>
-        <Button
-          className="w-full bg-accent text-accent-foreground hover:bg-accent/90 mt-2 btn-press light-sweep transition-all duration-300 hover:glow-sm"
-          asChild
-        >
+        <LedButton className="w-full mt-2" asChild>
           <a href={`https://wa.me/919876543210?text=${whatsappMsg}`} target="_blank" rel="noopener noreferrer">
             Inquire Now
           </a>
-        </Button>
+        </LedButton>
       </div>
     </div>
   );

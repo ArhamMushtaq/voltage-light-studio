@@ -267,3 +267,11 @@
   0%, 100% { box-shadow: 0 0 20px -5px hsl(var(--glow-accent) / 0.2), 0 0 4px -1px hsl(var(--glow-accent) / 0.1); }
   50% { box-shadow: 0 0 35px -5px hsl(var(--glow-accent) / 0.4), 0 0 8px -1px hsl(var(--glow-accent) / 0.2); }
 }
+
+@keyframes led-flicker-on {
+  0% { opacity: 0.5; filter: brightness(0.6); }
+  20% { opacity: 1; filter: brightness(1.2); }
+  40% { opacity: 0.8; filter: brightness(0.9); }
+  60% { opacity: 1; filter: brightness(1.1); }
+  100% { opacity: 1; filter: brightness(1); }
+}

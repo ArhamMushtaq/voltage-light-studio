@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { useMagnetic } from "@/hooks/useMagnetic";
+import { LedButton } from "@/components/ui/led-button";
 import heroBulb from "@/assets/hero-bulb.jpg";
 
 const HeroSection = () => {
   const [offsetY, setOffsetY] = useState(0);
-  const magneticCta = useMagnetic({ strength: 0.2, radius: 120 });
-  const magneticOutline = useMagnetic({ strength: 0.15, radius: 100 });
 
   useEffect(() => {
     const onScroll = () => setOffsetY(window.scrollY);
@@ -46,26 +43,12 @@ const HeroSection = () => {
             We produce durable, energy‑efficient LED bulbs in multiple voltage ranges for residential and commercial use.
           </p>
           <div className="flex flex-wrap gap-4 opacity-0 animate-fade-up" style={{ animationDelay: "0.55s" }}>
-            <span
-              ref={magneticCta.ref as React.RefObject<HTMLSpanElement>}
-              onMouseMove={magneticCta.onMouseMove}
-              onMouseLeave={magneticCta.onMouseLeave}
-              className="inline-block"
-            >
-              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 led-glow btn-press light-sweep transition-all duration-300" onClick={() => scrollTo("#products")}>
-                View Products
-              </Button>
-            </span>
-            <span
-              ref={magneticOutline.ref as React.RefObject<HTMLSpanElement>}
-              onMouseMove={magneticOutline.onMouseMove}
-              onMouseLeave={magneticOutline.onMouseLeave}
-              className="inline-block"
-            >
-              <Button size="lg" variant="outline" className="border-border text-foreground hover:bg-secondary btn-press light-sweep transition-all duration-300" onClick={() => scrollTo("#contact")}>
-                Contact Us
-              </Button>
-            </span>
+            <LedButton size="lg" onClick={() => scrollTo("#products")}>
+              View Products
+            </LedButton>
+            <LedButton size="lg" variant="outline" onClick={() => scrollTo("#contact")}>
+              Contact Us
+            </LedButton>
           </div>
         </div>
       </div>

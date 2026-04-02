@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Zap } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { LedButton } from "@/components/ui/led-button";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -51,13 +51,9 @@ const Navbar = () => {
               {link.label}
             </button>
           ))}
-          <Button
-            size="sm"
-            className="bg-accent text-accent-foreground hover:bg-accent/90 led-glow btn-press light-sweep transition-all duration-300"
-            onClick={() => handleClick("#contact")}
-          >
+          <LedButton size="sm" onClick={() => handleClick("#contact")}>
             Get a Quote
-          </Button>
+          </LedButton>
         </div>
 
         {/* Mobile toggle */}
@@ -80,13 +76,13 @@ const Navbar = () => {
                 {link.label}
               </button>
             ))}
-            <Button
-              className="bg-accent text-accent-foreground hover:bg-accent/90 w-full btn-press opacity-0 animate-fade-up"
+            <LedButton
+              className="w-full opacity-0 animate-fade-up"
               style={{ animationDelay: `${navLinks.length * 60}ms` }}
               onClick={() => handleClick("#contact")}
             >
               Get a Quote
-            </Button>
+            </LedButton>
           </div>
         </div>
       )}
