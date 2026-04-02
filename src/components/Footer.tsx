@@ -5,8 +5,8 @@ const Footer = () => {
   const ref = useScrollFade();
 
   return (
-    <footer className="border-t border-border bg-card py-12">
-      <div ref={ref} className="container mx-auto px-4 opacity-0">
+    <footer className="border-t border-border bg-card/50 py-12 relative z-10">
+      <div ref={ref} className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-3">
             <div className="flex items-center gap-2">

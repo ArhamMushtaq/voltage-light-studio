@@ -29,7 +29,7 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
-        scrolled ? "bg-background/90 backdrop-blur-md border-b border-border shadow-lg shadow-background/50" : "bg-transparent"
+        scrolled ? "glass border-b border-border shadow-lg shadow-background/50" : "bg-transparent"
       }`}
     >
       <div className="container mx-auto flex items-center justify-between py-4 px-4">
@@ -53,7 +53,7 @@ const Navbar = () => {
           ))}
           <Button
             size="sm"
-            className="bg-accent text-accent-foreground hover:bg-accent/90 glow-sm btn-press transition-all duration-300 hover:glow-md"
+            className="bg-accent text-accent-foreground hover:bg-accent/90 led-glow btn-press light-sweep transition-all duration-300"
             onClick={() => handleClick("#contact")}
           >
             Get a Quote
@@ -68,7 +68,7 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden bg-background/95 backdrop-blur-md border-b border-border animate-fade-in">
+        <div className="md:hidden glass border-b border-border animate-fade-in">
           <div className="container mx-auto flex flex-col gap-4 py-6 px-4">
             {navLinks.map((link, i) => (
               <button

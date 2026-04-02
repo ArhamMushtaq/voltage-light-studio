@@ -22,8 +22,8 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-24 border-t border-border">
-      <div ref={ref} className="container mx-auto px-4 opacity-0">
+    <section id="contact" className="py-24 border-t border-border relative z-10">
+      <div ref={ref} className="container mx-auto px-4">
         <div className="text-center space-y-4 mb-12">
           <p className="text-xs uppercase tracking-widest text-accent font-display">Get in Touch</p>
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground">Contact Us</h2>
@@ -45,7 +45,9 @@ const ContactSection = () => {
                   key={i}
                   className="flex items-center gap-3 text-muted-foreground group transition-all duration-300 hover:translate-x-1"
                 >
-                  <item.icon className="h-5 w-5 text-accent transition-transform duration-300 group-hover:scale-110" />
+                  <div className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center transition-all duration-300 group-hover:bg-accent/20 group-hover:scale-110">
+                    <item.icon className="h-4 w-4 text-accent transition-all duration-300 group-hover:drop-shadow-[0_0_8px_hsl(45,100%,60%)]" />
+                  </div>
                   <span>{item.text}</span>
                 </div>
               ))}
@@ -53,13 +55,13 @@ const ContactSection = () => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 glass rounded-lg p-6">
             <Input
               placeholder="Name"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               maxLength={100}
-              className="bg-secondary border-border text-foreground placeholder:text-muted-foreground input-glow transition-all duration-300"
+              className="bg-secondary/50 border-border text-foreground placeholder:text-muted-foreground input-glow transition-all duration-300"
             />
             <Input
               type="email"
@@ -67,7 +69,7 @@ const ContactSection = () => {
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               maxLength={255}
-              className="bg-secondary border-border text-foreground placeholder:text-muted-foreground input-glow transition-all duration-300"
+              className="bg-secondary/50 border-border text-foreground placeholder:text-muted-foreground input-glow transition-all duration-300"
             />
             <Textarea
               placeholder="Your message..."
@@ -75,9 +77,9 @@ const ContactSection = () => {
               onChange={(e) => setForm({ ...form, message: e.target.value })}
               maxLength={1000}
               rows={5}
-              className="bg-secondary border-border text-foreground placeholder:text-muted-foreground resize-none input-glow transition-all duration-300"
+              className="bg-secondary/50 border-border text-foreground placeholder:text-muted-foreground resize-none input-glow transition-all duration-300"
             />
-            <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 glow-sm btn-press transition-all duration-300 hover:glow-md">
+            <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 led-glow btn-press light-sweep transition-all duration-300">
               Send Message
             </Button>
           </form>

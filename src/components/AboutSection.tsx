@@ -4,8 +4,8 @@ const AboutSection = () => {
   const ref = useScrollFade();
 
   return (
-    <section id="about" className="py-24 border-t border-border">
-      <div ref={ref} className="container mx-auto px-4 max-w-3xl text-center space-y-6 opacity-0">
+    <section id="about" className="py-24 border-t border-border relative z-10">
+      <div ref={ref} className="container mx-auto px-4 max-w-3xl text-center space-y-6">
         <p className="text-xs uppercase tracking-widest text-accent font-display">About Us</p>
         <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground">
           Specialized in LED Lighting Solutions

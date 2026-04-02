@@ -1,4 +1,5 @@
 import { useScrollFade } from "@/hooks/useScrollFade";
+import { useTilt } from "@/hooks/useTilt";
 import { Button } from "@/components/ui/button";
 
 import bulb1 from "@/assets/led-bulb-1.jpg";
@@ -27,13 +28,18 @@ const products: Product[] = [
 ];
 
 const ProductCard = ({ product, index }: { product: Product; index: number }) => {
+  const tilt = useTilt({ maxTilt: 6, scale: 1.03 });
   const whatsappMsg = encodeURIComponent(`Hi, I'd like to inquire about the ${product.name} (${product.wattage}, ${product.voltage}).`);
 
   return (
     <div
+      ref={tilt.ref}
+      onMouseMove={tilt.onMouseMove}
+      onMouseLeave={tilt.onMouseLeave}
+      onMouseEnter={tilt.onMouseEnter}
       data-stagger
-      className="group rounded-lg border border-border bg-card overflow-hidden transition-all duration-500 ease-in-out hover:border-accent/40 hover:glow-sm hover:-translate-y-2 opacity-0"
-      style={{ animationDelay: `${index * 120}ms` }}
+      className="group rounded-lg border border-border glass glass-hover tilt-glare light-sweep overflow-hidden transition-all duration-500 ease-in-out hover:border-accent/40 hover:glow-sm opacity-0 will-change-transform"
+      style={{ animationDelay: `${index * 120}ms`, transformStyle: "preserve-3d" }}
     >
       <div className="aspect-square overflow-hidden bg-secondary/30">
         <img
@@ -54,7 +60,7 @@ const ProductCard = ({ product, index }: { product: Product; index: number }) =>
         </div>
         <p className="text-sm text-muted-foreground">{product.description}</p>
         <Button
-          className="w-full bg-accent text-accent-foreground hover:bg-accent/90 mt-2 btn-press transition-all duration-300 hover:glow-sm"
+          className="w-full bg-accent text-accent-foreground hover:bg-accent/90 mt-2 btn-press light-sweep transition-all duration-300 hover:glow-sm"
           asChild
         >
           <a href={`https://wa.me/919876543210?text=${whatsappMsg}`} target="_blank" rel="noopener noreferrer">
@@ -70,8 +76,8 @@ const ProductsSection = () => {
   const ref = useScrollFade({ staggerChildren: true, staggerDelay: 120 });
 
   return (
-    <section id="products" className="py-24 border-t border-border">
-      <div ref={ref} className="container mx-auto px-4 space-y-12 opacity-0">
+    <section id="products" className="py-24 border-t border-border relative z-10">
+      <div ref={ref} className="container mx-auto px-4 space-y-12">
         <div className="text-center space-y-4">
           <p className="text-xs uppercase tracking-widest text-accent font-display">Our Products</p>
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground">
