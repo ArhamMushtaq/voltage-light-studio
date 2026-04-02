@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, MessageCircle } from "lucide-react";
 import { useScrollFade } from "@/hooks/useScrollFade";
 
 const ContactSection = () => {
@@ -27,6 +27,7 @@ const ContactSection = () => {
         <div className="text-center space-y-4 mb-12">
           <p className="text-xs uppercase tracking-widest text-accent font-display">Get in Touch</p>
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground">Contact Us</h2>
+          <p className="text-muted-foreground">Contact us via WhatsApp or Email</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
@@ -37,18 +38,22 @@ const ContactSection = () => {
             </p>
             <div className="space-y-4">
               {[
-                { icon: Mail, text: "info@mrtraders.com" },
-                { icon: Phone, text: "+91 98765 43210" },
-                { icon: MapPin, text: "Industrial Area, New Delhi, India" },
+                { icon: Mail, text: "info@mrtraders.com", href: "mailto:info@mrtraders.com" },
+                { icon: Phone, text: "+92 3XX XXXXXXX", href: "tel:+923XXXXXXXXX" },
+                { icon: MessageCircle, text: "Chat on WhatsApp", href: "https://wa.me/923XXXXXXXXX?text=Hello%2C%20I%20am%20interested%20in%20your%20LED%20bulbs.%20Please%20share%20details." },
+                { icon: MapPin, text: "Industrial Area, Pakistan", href: undefined },
               ].map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3 text-muted-foreground group transition-all duration-300 hover:translate-x-1"
-                >
+                <div key={i} className="flex items-center gap-3 text-muted-foreground group transition-all duration-300 hover:translate-x-1">
                   <div className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center transition-all duration-300 group-hover:bg-accent/20 group-hover:scale-110">
                     <item.icon className="h-4 w-4 text-accent transition-all duration-300 group-hover:drop-shadow-[0_0_8px_hsl(45,100%,60%)]" />
                   </div>
-                  <span>{item.text}</span>
+                  {item.href ? (
+                    <a href={item.href} target={item.href.startsWith("http") ? "_blank" : undefined} rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined} className="hover:text-foreground transition-colors duration-300">
+                      {item.text}
+                    </a>
+                  ) : (
+                    <span>{item.text}</span>
+                  )}
                 </div>
               ))}
             </div>
