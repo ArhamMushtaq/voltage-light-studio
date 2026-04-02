@@ -7,9 +7,11 @@ import WhyChooseSection from "@/components/WhyChooseSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import CircuitBackground from "@/components/CircuitBackground";
 
 const Index = () => (
   <>
+    <CircuitBackground />
     <Navbar />
     <HeroSection />
     <AboutSection />

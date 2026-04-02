@@ -66,6 +66,7 @@
 }
 
 @layer utilities {
+  /* Glow utilities */
   .glow-sm {
     box-shadow: 0 0 15px -3px hsl(var(--glow-accent) / 0.3);
   }
@@ -105,4 +106,81 @@
   .nav-underline:hover::after {
     @apply origin-bottom-left scale-x-100;
   }
+
+  /* Light sweep / shine effect */
+  .light-sweep {
+    @apply relative overflow-hidden;
+  }
+  .light-sweep::before {
+    content: '';
+    @apply absolute inset-0 z-10 pointer-events-none;
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      hsl(var(--glow-primary) / 0.08) 45%,
+      hsl(var(--glow-primary) / 0.15) 50%,
+      hsl(var(--glow-primary) / 0.08) 55%,
+      transparent 60%
+    );
+    transform: translateX(-100%);
+    transition: none;
+  }
+  .light-sweep:hover::before {
+    animation: sweep 0.7s ease-in-out forwards;
+  }
+
+  /* 3D tilt card glare overlay */
+  .tilt-glare::after {
+    content: '';
+    @apply absolute inset-0 z-10 pointer-events-none rounded-lg;
+    background: radial-gradient(
+      circle at var(--glare-x, 50%) var(--glare-y, 50%),
+      hsl(var(--glow-primary) / 0.08) 0%,
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .tilt-glare:hover::after {
+    opacity: 1;
+  }
+
+  /* Glass morphism */
+  .glass {
+    background: hsl(var(--card) / 0.6);
+    backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+  .glass-hover:hover {
+    background: hsl(var(--card) / 0.75);
+    border-color: hsl(var(--accent) / 0.2);
+  }
+
+  /* LED breathing glow */
+  .led-glow {
+    animation: led-breathe 3s ease-in-out infinite;
+  }
+
+  /* Section reveal blur */
+  .section-reveal {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(20px) scale(0.98);
+    transition: opacity 0.8s ease-out, filter 0.8s ease-out, transform 0.8s ease-out;
+  }
+  .section-reveal.visible {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes led-breathe {
+  0%, 100% { box-shadow: 0 0 20px -5px hsl(var(--glow-accent) / 0.2), 0 0 4px -1px hsl(var(--glow-accent) / 0.1); }
+  50% { box-shadow: 0 0 35px -5px hsl(var(--glow-accent) / 0.4), 0 0 8px -1px hsl(var(--glow-accent) / 0.2); }
 }

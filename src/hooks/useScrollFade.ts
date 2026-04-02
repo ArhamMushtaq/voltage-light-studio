@@ -14,16 +14,20 @@ export const useScrollFade = (options: ScrollFadeOptions = {}) => {
     const el = ref.current;
     if (!el) return;
 
+    // Use section-reveal class for cinematic blur+scale entrance
+    el.classList.add("section-reveal");
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          el.classList.add("animate-fade-up");
+          el.classList.add("visible");
 
           if (staggerChildren) {
             const children = el.querySelectorAll("[data-stagger]");
             children.forEach((child, i) => {
-              (child as HTMLElement).style.animationDelay = `${i * staggerDelay}ms`;
-              child.classList.add("animate-fade-up");
+              const htmlChild = child as HTMLElement;
+              htmlChild.style.animationDelay = `${i * staggerDelay}ms`;
+              htmlChild.classList.add("animate-fade-up");
             });
           }
 
