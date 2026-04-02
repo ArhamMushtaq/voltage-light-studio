@@ -1,6 +1,6 @@
 import { useScrollFade } from "@/hooks/useScrollFade";
 import { useTilt } from "@/hooks/useTilt";
-import { Button } from "@/components/ui/button";
+import { LedButton } from "@/components/ui/led-button";
 
 import bulb1 from "@/assets/led-bulb-1.jpg";
 import bulb2 from "@/assets/led-bulb-2.jpg";
