@@ -10,7 +10,7 @@ const featured = products.slice(0, 3);
 const ProductCard = ({ product, index }: { product: (typeof products)[0]; index: number }) => {
   const tilt = useTilt({ maxTilt: 6, scale: 1.03 });
   const whatsappMsg = encodeURIComponent(
-    `Hi, I'd like to inquire about the ${product.name} (${product.wattage}, ${product.voltage}).`
+    `Hello, I am interested in the product: ${product.name}, Voltage: ${product.voltage}, Wattage: ${product.wattage}. Please share details.`
   );
 
   return (
