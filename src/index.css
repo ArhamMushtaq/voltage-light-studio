@@ -94,6 +94,56 @@
     transform: scale(0.97);
   }
 
+  /* 3D LED Button System */
+  .led-btn-3d {
+    box-shadow:
+      0 4px 6px -1px hsl(var(--background) / 0.6),
+      0 2px 4px -2px hsl(var(--background) / 0.4),
+      inset 0 1px 0 hsl(var(--glow-primary) / 0.1);
+    transform-style: preserve-3d;
+  }
+  .led-btn-3d:hover {
+    box-shadow:
+      0 8px 20px -4px hsl(var(--glow-accent) / 0.35),
+      0 4px 8px -2px hsl(var(--background) / 0.5),
+      inset 0 1px 0 hsl(var(--glow-primary) / 0.15),
+      0 0 30px -8px hsl(var(--glow-accent) / 0.25);
+  }
+  .led-btn-off {
+    opacity: 0.7;
+    filter: brightness(0.8);
+  }
+  .led-btn-on {
+    opacity: 1;
+    filter: brightness(1);
+    animation: led-flicker-on 0.3s ease-out forwards;
+  }
+  .led-btn-pressed {
+    transform: translate(0,0) translateY(1px) scale(0.97) !important;
+    box-shadow:
+      0 1px 2px hsl(var(--background) / 0.6),
+      inset 0 2px 4px hsl(var(--background) / 0.3),
+      0 0 20px -4px hsl(var(--glow-accent) / 0.5) !important;
+    filter: brightness(1.15);
+  }
+
+  /* LED sweep on hover */
+  .led-btn-sweep {
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      hsl(var(--glow-primary) / 0.1) 45%,
+      hsl(var(--glow-primary) / 0.2) 50%,
+      hsl(var(--glow-primary) / 0.1) 55%,
+      transparent 60%
+    );
+    transform: translateX(-100%);
+    transition: none;
+  }
+  .led-btn-3d:hover .led-btn-sweep {
+    animation: sweep 0.7s ease-in-out forwards;
+  }
+
   /* Nav link underline animation */
   .nav-underline {
     @apply relative;
