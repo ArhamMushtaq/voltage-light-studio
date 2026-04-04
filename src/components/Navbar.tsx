@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, Zap } from "lucide-react";
 import { LedButton } from "@/components/ui/led-button";
 
@@ -14,6 +15,8 @@ const navLinks = [
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -23,7 +26,11 @@ const Navbar = () => {
 
   const handleClick = (href: string) => {
     setMobileOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    if (location.pathname !== "/") {
+      navigate("/" + href);
+    } else {
+      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
