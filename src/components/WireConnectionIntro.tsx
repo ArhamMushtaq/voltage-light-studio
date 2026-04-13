@@ -17,24 +17,31 @@ const WireConnectionIntro = ({ onComplete }: { onComplete: () => void }) => {
     canvas.height = window.innerHeight;
     const cx = canvas.width / 2;
     const cy = canvas.height / 2;
-    const particleCount = isMobile ? 25 : 50;
+    // Realistic wire spark: many tiny hot metal fragments flying out
+    const particleCount = isMobile ? 40 : 90;
 
     interface Particle {
       x: number; y: number; vx: number; vy: number;
       life: number; maxLife: number; size: number;
-      hue: number;
+      hue: number; lightness: number; trail: {x: number; y: number}[];
     }
 
     const particles: Particle[] = Array.from({ length: particleCount }, () => {
-      const angle = Math.random() * Math.PI * 2;
-      const speed = 3 + Math.random() * 8;
+      // Sparks mostly fly upward and outward like real welding/wire sparks
+      const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.4;
+      const speed = 1.5 + Math.random() * 6;
+      const isHot = Math.random() > 0.6;
       return {
-        x: cx, y: cy,
-        vx: Math.cos(angle) * speed,
+        x: cx + (Math.random() - 0.5) * 6,
+        y: cy + (Math.random() - 0.5) * 4,
+        vx: Math.cos(angle) * speed + (Math.random() - 0.5) * 2,
         vy: Math.sin(angle) * speed,
-        life: 1, maxLife: 0.3 + Math.random() * 0.5,
-        size: 1 + Math.random() * 3,
-        hue: 40 + Math.random() * 20,
+        life: 1,
+        maxLife: 0.2 + Math.random() * 0.6,
+        size: 0.4 + Math.random() * 1.5,
+        hue: isHot ? 30 + Math.random() * 15 : 15 + Math.random() * 25,
+        lightness: isHot ? 55 + Math.random() * 15 : 35 + Math.random() * 20,
+        trail: [] as {x: number; y: number}[],
       };
     });
 
@@ -50,21 +57,42 @@ const WireConnectionIntro = ({ onComplete }: { onComplete: () => void }) => {
         p.life -= dt / p.maxLife;
         if (p.life <= 0) continue;
         alive = true;
+
+        // Store trail positions
+        p.trail.push({ x: p.x, y: p.y });
+        if (p.trail.length > 5) p.trail.shift();
+
         p.x += p.vx;
         p.y += p.vy;
-        p.vy += 0.15; // gravity
-        p.vx *= 0.96;
-        p.vy *= 0.96;
-        const alpha = p.life;
-        // Core particle
+        p.vy += 0.25; // stronger gravity — sparks arc down like real metal
+        p.vx *= 0.97;
+        p.vy *= 0.97;
+
+        const alpha = p.life * 0.45; // low brightness overall
+
+        // Draw trail (like a hot metal fragment streak)
+        if (p.trail.length > 1) {
+          ctx.beginPath();
+          ctx.moveTo(p.trail[0].x, p.trail[0].y);
+          for (let i = 1; i < p.trail.length; i++) {
+            ctx.lineTo(p.trail[i].x, p.trail[i].y);
+          }
+          ctx.lineTo(p.x, p.y);
+          ctx.strokeStyle = `hsla(${p.hue},80%,${p.lightness}%,${alpha * 0.4})`;
+          ctx.lineWidth = p.size * p.life * 0.6;
+          ctx.stroke();
+        }
+
+        // Core particle — small, dim hot fragment
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${p.hue},100%,75%,${alpha})`;
+        ctx.fillStyle = `hsla(${p.hue},70%,${p.lightness}%,${alpha})`;
         ctx.fill();
-        // Glow
+
+        // Subtle warm glow
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * p.life * 4, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${p.hue},100%,60%,${alpha * 0.15})`;
+        ctx.arc(p.x, p.y, p.size * p.life * 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${p.hue},60%,${p.lightness - 10}%,${alpha * 0.08})`;
         ctx.fill();
       }
 
@@ -263,14 +291,15 @@ const WireConnectionIntro = ({ onComplete }: { onComplete: () => void }) => {
         {/* ===== SPARK AT CONNECTION ===== */}
         {phase === "spark" && (
           <g filter="url(#spark-glow)">
-            <circle cx="600" cy="252" r="8" fill="hsl(45,100%,90%)" className="spark-core" />
-            <circle cx="600" cy="252" r="16" fill="hsl(45,100%,80%)" opacity="0.5" className="spark-core" />
-            <circle cx="600" cy="252" r="28" fill="hsl(45,100%,70%)" opacity="0.2" className="spark-ring" />
-            {/* Electric arc lines */}
-            <line x1="592" y1="245" x2="585" y2="235" stroke="hsl(45,100%,85%)" strokeWidth="1.5" opacity="0.8" className="spark-arc" />
-            <line x1="608" y1="245" x2="615" y2="235" stroke="hsl(45,100%,85%)" strokeWidth="1.5" opacity="0.8" className="spark-arc" />
-            <line x1="595" y1="260" x2="588" y2="272" stroke="hsl(45,100%,85%)" strokeWidth="1" opacity="0.6" className="spark-arc" />
-            <line x1="605" y1="260" x2="612" y2="272" stroke="hsl(45,100%,85%)" strokeWidth="1" opacity="0.6" className="spark-arc" />
+            {/* Dim central glow — like real wire contact point */}
+            <circle cx="600" cy="252" r="5" fill="hsl(35,80%,65%)" opacity="0.6" className="spark-core" />
+            <circle cx="600" cy="252" r="10" fill="hsl(40,70%,50%)" opacity="0.25" className="spark-core" />
+            <circle cx="600" cy="252" r="20" fill="hsl(40,60%,40%)" opacity="0.08" className="spark-ring" />
+            {/* Small jagged arc lines — subtle */}
+            <polyline points="596,248 592,242 594,239 590,233" stroke="hsl(40,70%,55%)" strokeWidth="1" opacity="0.4" fill="none" className="spark-arc" />
+            <polyline points="604,248 608,241 606,238 610,232" stroke="hsl(40,70%,55%)" strokeWidth="1" opacity="0.4" fill="none" className="spark-arc" />
+            <polyline points="597,257 593,263 595,267" stroke="hsl(35,60%,45%)" strokeWidth="0.8" opacity="0.3" fill="none" className="spark-arc" />
+            <polyline points="603,257 607,264 605,268" stroke="hsl(35,60%,45%)" strokeWidth="0.8" opacity="0.3" fill="none" className="spark-arc" />
           </g>
         )}
       </svg>
@@ -284,8 +313,8 @@ const WireConnectionIntro = ({ onComplete }: { onComplete: () => void }) => {
       <div
         className="absolute inset-0 z-20 pointer-events-none"
         style={{
-          background: "radial-gradient(circle at 50% 50%, hsl(45,100%,90%), hsl(45,50%,70%), transparent 70%)",
-          opacity: phase === "spark" ? 0.7 : 0,
+          background: "radial-gradient(circle at 50% 50%, hsl(40,60%,50%), hsl(35,40%,30%), transparent 50%)",
+          opacity: phase === "spark" ? 0.25 : 0,
           transition: "opacity 0.2s ease-out",
         }}
       />
