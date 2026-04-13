@@ -17,22 +17,24 @@ const WireConnectionIntro = ({ onComplete }: { onComplete: () => void }) => {
     canvas.height = window.innerHeight;
     const cx = canvas.width / 2;
     const cy = canvas.height / 2;
-    const particleCount = isMobile ? 20 : 40;
+    const particleCount = isMobile ? 25 : 50;
 
     interface Particle {
       x: number; y: number; vx: number; vy: number;
       life: number; maxLife: number; size: number;
+      hue: number;
     }
 
     const particles: Particle[] = Array.from({ length: particleCount }, () => {
       const angle = Math.random() * Math.PI * 2;
-      const speed = 2 + Math.random() * 6;
+      const speed = 3 + Math.random() * 8;
       return {
         x: cx, y: cy,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
-        life: 1, maxLife: 0.4 + Math.random() * 0.4,
+        life: 1, maxLife: 0.3 + Math.random() * 0.5,
         size: 1 + Math.random() * 3,
+        hue: 40 + Math.random() * 20,
       };
     });
 
@@ -50,17 +52,19 @@ const WireConnectionIntro = ({ onComplete }: { onComplete: () => void }) => {
         alive = true;
         p.x += p.vx;
         p.y += p.vy;
-        p.vx *= 0.97;
-        p.vy *= 0.97;
+        p.vy += 0.15; // gravity
+        p.vx *= 0.96;
+        p.vy *= 0.96;
         const alpha = p.life;
+        // Core particle
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(45,100%,70%,${alpha})`;
+        ctx.fillStyle = `hsla(${p.hue},100%,75%,${alpha})`;
         ctx.fill();
-        // glow
+        // Glow
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * p.life * 3, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(45,100%,60%,${alpha * 0.2})`;
+        ctx.arc(p.x, p.y, p.size * p.life * 4, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${p.hue},100%,60%,${alpha * 0.15})`;
         ctx.fill();
       }
 
@@ -74,11 +78,10 @@ const WireConnectionIntro = ({ onComplete }: { onComplete: () => void }) => {
 
   // Phase timing
   useEffect(() => {
-    // wires animate for 1.8s via CSS, then spark
     const t1 = setTimeout(() => setPhase("spark"), 1800);
-    const t2 = setTimeout(() => setPhase("flash"), 2200);
-    const t3 = setTimeout(() => setPhase("done"), 2800);
-    const t4 = setTimeout(onComplete, 3000);
+    const t2 = setTimeout(() => setPhase("flash"), 2300);
+    const t3 = setTimeout(() => setPhase("done"), 2900);
+    const t4 = setTimeout(onComplete, 3100);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
   }, [onComplete]);
 
@@ -86,69 +89,189 @@ const WireConnectionIntro = ({ onComplete }: { onComplete: () => void }) => {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-background"
+      className="fixed inset-0 z-[9999] flex items-center justify-center"
       style={{
+        background: "hsl(0 0% 3%)",
         opacity: phase === "flash" ? 0 : 1,
-        transition: "opacity 0.5s ease-out",
+        transition: "opacity 0.6s ease-out",
       }}
     >
-      {/* SVG Wires */}
+      {/* SVG Wires with branding */}
       <svg
         className="absolute inset-0 w-full h-full"
-        viewBox="0 0 1000 500"
+        viewBox="0 0 1200 500"
         preserveAspectRatio="xMidYMid meet"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
           <filter id="wire-glow">
-            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feGaussianBlur stdDeviation="3" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
-          <linearGradient id="wire-left-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="hsl(0,0%,40%)" />
-            <stop offset="90%" stopColor="hsl(0,0%,70%)" />
-            <stop offset="100%" stopColor="hsl(45,100%,60%)" />
+          <filter id="spark-glow">
+            <feGaussianBlur stdDeviation="8" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter id="text-glow">
+            <feGaussianBlur stdDeviation="1" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+
+          {/* Left wire gradient - dark rubber cable */}
+          <linearGradient id="wire-left-body" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="hsl(0,0%,22%)" />
+            <stop offset="30%" stopColor="hsl(0,0%,15%)" />
+            <stop offset="50%" stopColor="hsl(0,0%,20%)" />
+            <stop offset="70%" stopColor="hsl(0,0%,12%)" />
+            <stop offset="100%" stopColor="hsl(0,0%,18%)" />
           </linearGradient>
-          <linearGradient id="wire-right-grad" x1="100%" y1="0%" x2="0%" y2="0%">
-            <stop offset="0%" stopColor="hsl(0,0%,40%)" />
-            <stop offset="90%" stopColor="hsl(0,0%,70%)" />
-            <stop offset="100%" stopColor="hsl(45,100%,60%)" />
+          <linearGradient id="wire-right-body" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="hsl(0,0%,22%)" />
+            <stop offset="30%" stopColor="hsl(0,0%,15%)" />
+            <stop offset="50%" stopColor="hsl(0,0%,20%)" />
+            <stop offset="70%" stopColor="hsl(0,0%,12%)" />
+            <stop offset="100%" stopColor="hsl(0,0%,18%)" />
           </linearGradient>
+
+          {/* Copper tip gradient */}
+          <linearGradient id="copper-tip" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="hsl(30,60%,35%)" />
+            <stop offset="40%" stopColor="hsl(35,70%,50%)" />
+            <stop offset="60%" stopColor="hsl(40,80%,60%)" />
+            <stop offset="100%" stopColor="hsl(45,90%,65%)" />
+          </linearGradient>
+
+          {/* Wire highlight for rubber sheen */}
+          <linearGradient id="wire-highlight" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="hsl(0,0%,100%)" stopOpacity="0.08" />
+            <stop offset="30%" stopColor="hsl(0,0%,100%)" stopOpacity="0.03" />
+            <stop offset="100%" stopColor="hsl(0,0%,100%)" stopOpacity="0" />
+          </linearGradient>
+
+          {/* Inner current glow */}
+          <linearGradient id="current-glow-left" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="hsl(45,100%,60%)" stopOpacity="0" />
+            <stop offset="70%" stopColor="hsl(45,100%,60%)" stopOpacity="0.05" />
+            <stop offset="100%" stopColor="hsl(45,100%,60%)" stopOpacity="0.3" />
+          </linearGradient>
+          <linearGradient id="current-glow-right" x1="100%" y1="0%" x2="0%" y2="0%">
+            <stop offset="0%" stopColor="hsl(45,100%,60%)" stopOpacity="0" />
+            <stop offset="70%" stopColor="hsl(45,100%,60%)" stopOpacity="0.05" />
+            <stop offset="100%" stopColor="hsl(45,100%,60%)" stopOpacity="0.3" />
+          </linearGradient>
+
+          <clipPath id="left-wire-clip">
+            <path d="M -80 235 Q 150 220, 350 240 Q 440 250, 530 245 L 580 245 L 580 260 L 530 260 Q 440 255, 350 260 Q 150 275, -80 265 Z" />
+          </clipPath>
+          <clipPath id="right-wire-clip">
+            <path d="M 1280 235 Q 1050 220, 850 240 Q 760 250, 670 245 L 620 245 L 620 260 L 670 260 Q 760 255, 850 260 Q 1050 275, 1280 265 Z" />
+          </clipPath>
         </defs>
 
-        {/* Left wire */}
-        <g filter="url(#wire-glow)">
+        {/* ===== LEFT WIRE ===== */}
+        <g className="wire-left" filter="url(#wire-glow)">
+          {/* Main cable body */}
           <path
-            d="M -50 250 Q 150 230, 300 250 Q 380 260, 460 250 L 495 250"
-            fill="none"
-            stroke="url(#wire-left-grad)"
-            strokeWidth="3"
-            strokeLinecap="round"
-            className="wire-left"
+            d="M -80 235 Q 150 220, 350 240 Q 440 250, 530 245 L 580 245 L 580 260 L 530 260 Q 440 255, 350 260 Q 150 275, -80 265 Z"
+            fill="url(#wire-left-body)"
+            stroke="hsl(0,0%,10%)"
+            strokeWidth="0.5"
           />
-          {/* Copper tip */}
-          <circle cx="495" cy="250" r="4" fill="hsl(45,100%,60%)" className="wire-left-tip" />
+          {/* Rubber sheen highlight */}
+          <path
+            d="M -80 235 Q 150 220, 350 240 Q 440 250, 530 245 L 580 245 L 580 248 L 530 248 Q 440 252, 350 243 Q 150 224, -80 238 Z"
+            fill="url(#wire-highlight)"
+          />
+          {/* Inner current glow */}
+          <path
+            d="M -80 242 Q 150 230, 350 247 Q 440 252, 530 250 L 580 250 L 580 255 L 530 255 Q 440 253, 350 255 Q 150 268, -80 258 Z"
+            fill="url(#current-glow-left)"
+            className="current-pulse"
+          />
+          {/* Copper exposed tip */}
+          <rect x="570" y="243" width="25" height="19" rx="2" fill="url(#copper-tip)" />
+          <rect x="570" y="243" width="25" height="6" rx="1" fill="hsl(40,80%,65%)" opacity="0.3" />
+
+          {/* MR TRADERS branding on left wire */}
+          <g clipPath="url(#left-wire-clip)" filter="url(#text-glow)">
+            <text
+              x="280"
+              y="254"
+              fill="hsl(0,0%,40%)"
+              fontSize="9"
+              fontFamily="Space Grotesk, sans-serif"
+              fontWeight="600"
+              letterSpacing="3"
+              textAnchor="middle"
+            >
+              MR TRADERS
+            </text>
+          </g>
         </g>
 
-        {/* Right wire */}
-        <g filter="url(#wire-glow)">
+        {/* ===== RIGHT WIRE ===== */}
+        <g className="wire-right" filter="url(#wire-glow)">
+          {/* Main cable body */}
           <path
-            d="M 1050 250 Q 850 270, 700 250 Q 620 240, 540 250 L 505 250"
-            fill="none"
-            stroke="url(#wire-right-grad)"
-            strokeWidth="3"
-            strokeLinecap="round"
-            className="wire-right"
+            d="M 1280 235 Q 1050 220, 850 240 Q 760 250, 670 245 L 620 245 L 620 260 L 670 260 Q 760 255, 850 260 Q 1050 275, 1280 265 Z"
+            fill="url(#wire-right-body)"
+            stroke="hsl(0,0%,10%)"
+            strokeWidth="0.5"
           />
-          <circle cx="505" cy="250" r="4" fill="hsl(45,100%,60%)" className="wire-right-tip" />
+          {/* Rubber sheen highlight */}
+          <path
+            d="M 1280 235 Q 1050 220, 850 240 Q 760 250, 670 245 L 620 245 L 620 248 L 670 248 Q 760 252, 850 243 Q 1050 224, 1280 238 Z"
+            fill="url(#wire-highlight)"
+          />
+          {/* Inner current glow */}
+          <path
+            d="M 1280 242 Q 1050 230, 850 247 Q 760 252, 670 250 L 620 250 L 620 255 L 670 255 Q 760 253, 850 255 Q 1050 268, 1280 258 Z"
+            fill="url(#current-glow-right)"
+            className="current-pulse"
+          />
+          {/* Copper exposed tip */}
+          <rect x="605" y="243" width="25" height="19" rx="2" fill="url(#copper-tip)" />
+          <rect x="605" y="243" width="25" height="6" rx="1" fill="hsl(40,80%,65%)" opacity="0.3" />
+
+          {/* MR TRADERS branding on right wire */}
+          <g clipPath="url(#right-wire-clip)" filter="url(#text-glow)">
+            <text
+              x="920"
+              y="254"
+              fill="hsl(0,0%,40%)"
+              fontSize="9"
+              fontFamily="Space Grotesk, sans-serif"
+              fontWeight="600"
+              letterSpacing="3"
+              textAnchor="middle"
+            >
+              MR TRADERS
+            </text>
+          </g>
         </g>
 
-        {/* Spark at connection point */}
+        {/* ===== SPARK AT CONNECTION ===== */}
         {phase === "spark" && (
-          <circle cx="500" cy="250" r="12" fill="hsl(45,100%,80%)" className="animate-ping" opacity="0.8" />
+          <g filter="url(#spark-glow)">
+            <circle cx="600" cy="252" r="8" fill="hsl(45,100%,90%)" className="spark-core" />
+            <circle cx="600" cy="252" r="16" fill="hsl(45,100%,80%)" opacity="0.5" className="spark-core" />
+            <circle cx="600" cy="252" r="28" fill="hsl(45,100%,70%)" opacity="0.2" className="spark-ring" />
+            {/* Electric arc lines */}
+            <line x1="592" y1="245" x2="585" y2="235" stroke="hsl(45,100%,85%)" strokeWidth="1.5" opacity="0.8" className="spark-arc" />
+            <line x1="608" y1="245" x2="615" y2="235" stroke="hsl(45,100%,85%)" strokeWidth="1.5" opacity="0.8" className="spark-arc" />
+            <line x1="595" y1="260" x2="588" y2="272" stroke="hsl(45,100%,85%)" strokeWidth="1" opacity="0.6" className="spark-arc" />
+            <line x1="605" y1="260" x2="612" y2="272" stroke="hsl(45,100%,85%)" strokeWidth="1" opacity="0.6" className="spark-arc" />
+          </g>
         )}
       </svg>
 
@@ -157,13 +280,13 @@ const WireConnectionIntro = ({ onComplete }: { onComplete: () => void }) => {
         <canvas ref={canvasRef} className="absolute inset-0 z-10 pointer-events-none" />
       )}
 
-      {/* White flash overlay */}
+      {/* Flash overlay */}
       <div
         className="absolute inset-0 z-20 pointer-events-none"
         style={{
-          background: "hsl(45,100%,90%)",
-          opacity: phase === "spark" ? 0.6 : phase === "flash" ? 0 : 0,
-          transition: "opacity 0.15s ease-out",
+          background: "radial-gradient(circle at 50% 50%, hsl(45,100%,90%), hsl(45,50%,70%), transparent 70%)",
+          opacity: phase === "spark" ? 0.7 : 0,
+          transition: "opacity 0.2s ease-out",
         }}
       />
     </div>
