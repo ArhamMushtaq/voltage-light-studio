@@ -226,34 +226,58 @@
 }
 
 /* Wire connection intro animations */
-.wire-img-left {
-  transform: translateX(-100%) translateY(-50%);
-  animation: wire-img-slide-left 1.8s cubic-bezier(0.22, 0.68, 0.36, 1) forwards;
+.wire-left {
+  transform: translateX(-110%);
+  animation: wire-slide-left 1.8s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
-.wire-img-right {
-  transform: translateX(100%) translateY(-50%);
-  animation: wire-img-slide-right 1.8s cubic-bezier(0.22, 0.68, 0.36, 1) forwards;
-}
-
-@keyframes wire-img-slide-left {
-  0% { transform: translateX(-60%) translateY(-50%); }
-  65% { transform: translateX(-2%) translateY(-50%); }
-  80% { transform: translateX(1%) translateY(-50%); }
-  100% { transform: translateX(0%) translateY(-50%); }
-}
-@keyframes wire-img-slide-right {
-  0% { transform: translateX(60%) translateY(-50%); }
-  65% { transform: translateX(2%) translateY(-50%); }
-  80% { transform: translateX(-1%) translateY(-50%); }
-  100% { transform: translateX(0%) translateY(-50%); }
+.wire-right {
+  transform: translateX(110%);
+  animation: wire-slide-right 1.8s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 
-.spark-center-glow {
-  animation: spark-pulse 0.3s ease-out infinite alternate;
+@keyframes wire-slide-left {
+  0% { transform: translateX(-60%); }
+  70% { transform: translateX(-1%); }
+  85% { transform: translateX(0.5%); }
+  100% { transform: translateX(0%); }
 }
-@keyframes spark-pulse {
-  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-  100% { transform: translate(-50%, -50%) scale(1.4); opacity: 1; }
+@keyframes wire-slide-right {
+  0% { transform: translateX(60%); }
+  70% { transform: translateX(1%); }
+  85% { transform: translateX(-0.5%); }
+  100% { transform: translateX(0%); }
+}
+
+/* Current flow pulse */
+.current-pulse {
+  animation: current-flow 1.2s ease-in-out infinite;
+}
+@keyframes current-flow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+/* Spark effects */
+.spark-core {
+  animation: spark-flicker 0.15s ease-in-out infinite alternate;
+}
+@keyframes spark-flicker {
+  0% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+.spark-ring {
+  animation: spark-expand 0.4s ease-out forwards;
+}
+@keyframes spark-expand {
+  0% { r: 10; opacity: 0.4; }
+  100% { r: 35; opacity: 0; }
+}
+.spark-arc {
+  animation: arc-flash 0.2s ease-out infinite alternate;
+}
+@keyframes arc-flash {
+  0% { opacity: 0.4; }
+  100% { opacity: 1; }
 }
 
 @keyframes sweep {
